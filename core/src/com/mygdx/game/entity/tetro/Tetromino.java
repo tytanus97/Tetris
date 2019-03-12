@@ -1,4 +1,4 @@
-package com.mygdx.game.entity;
+package com.mygdx.game.entity.tetro;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -26,10 +26,10 @@ public abstract class Tetromino {
     public void draw(ShapeRenderer shapeRenderer) {
         shapeRenderer.setColor(Color.GOLD);
         shapeRenderer.rect(pivot.x * TetrisGame.BLOCK_DIV,pivot.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
-        shapeRenderer.setColor(Color.RED);
+       /* shapeRenderer.setColor(Color.RED);
         for(Vector2 vector:bodyList) {
             shapeRenderer.rect(vector.x * TetrisGame.BLOCK_DIV,vector.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
-        }
+        }*/
     }
 
     public Color getColor() {
@@ -57,6 +57,7 @@ public abstract class Tetromino {
     }
 
 
+    public abstract void realocate(Vector2 vector2);
 }
 
 

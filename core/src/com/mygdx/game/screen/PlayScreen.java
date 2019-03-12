@@ -8,34 +8,26 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
 import com.mygdx.game.controller.BoardController;
 import com.mygdx.game.controller.MoveController;
-import com.mygdx.game.entity.Board;
-import com.mygdx.game.entity.ITetro;
-import com.mygdx.game.entity.Tetromino;
-
-import java.util.Arrays;
-
-
+import com.mygdx.game.entity.board.Board;
+import com.mygdx.game.entity.tetro.ITetro;
+import com.mygdx.game.entity.tetro.Tetromino;
 
 public class PlayScreen extends AbstractScreen{
-
-
 
     private ShapeRenderer shapeRenderer;
     private float timer = 0;
     private MoveController moveController;
     private BoardController boardController;
     private Board board;
-
-    Tetromino tetromino = new ITetro();
-
-
-
+    private Tetromino tetromino;
 
     public PlayScreen(TetrisGame tetrisGame) {
         super(tetrisGame);
-
+        tetromino  = new ITetro();
         this.board.clearBoard();
         this.board.printBoard();
+
+        this.board = (boardController.syncBoard(tetromino,this.board));
     }
 
 
@@ -45,14 +37,17 @@ public class PlayScreen extends AbstractScreen{
         moveController = new MoveController();
         boardController = new BoardController();
         board = new Board();
+
+
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
-        update(delta);
         checkInput();
+        update(delta);
         draw();
+
 
     }
 
@@ -73,6 +68,7 @@ public class PlayScreen extends AbstractScreen{
     private void draw() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         tetromino.draw(shapeRenderer);
+        board.draw(shapeRenderer);
         drawLines(shapeRenderer);
         shapeRenderer.end();
 
@@ -94,15 +90,36 @@ public class PlayScreen extends AbstractScreen{
     private void update(float delta) {
 
         shapeRenderer.setProjectionMatrix(sb.getProjectionMatrix());
-        this.board.setBoard(boardController.syncBoard(tetromino,this.board));
+
+
+
+        this.board = (boardController.syncBoard(tetromino,this.board));
         timer +=delta;
-        if(timer > 0.5) {
+        if(timer > 0.5f) {
+            checkColisionWithGround();
             this.board.printBoard();
-            moveController.moveDown(tetromino);
+            tetromino = moveController.moveDown(tetromino);
+            System.out.println(tetromino.getPivot().y+" "+tetromino.getPivot().x);
+            timer = 0f;
+        }
+    }
+
+    private void checkColisionWithGround() {
+
+        boolean touchedGround = false;
+
+        /*for(Vector2 body:tetromino.getBodyList()) {
+            if(body.y == 0) touchedGround = true;
+        }*/
+        if(tetromino.getPivot().y <= 0) touchedGround = true;
+
+        if(touchedGround) {
+            board.setTetroToBoard(tetromino);
+            tetromino.realocate(new Vector2(5,18));
             timer = 0;
 
         }
     }
 
-    }
-    
+}
+
