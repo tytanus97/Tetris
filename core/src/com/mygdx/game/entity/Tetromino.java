@@ -22,7 +22,15 @@ public abstract class Tetromino {
 
     protected abstract void init();
     protected abstract void rotate();
-    public abstract void update(float dt);
+
+    public void draw(ShapeRenderer shapeRenderer) {
+        shapeRenderer.setColor(Color.GOLD);
+        shapeRenderer.rect(pivot.x * TetrisGame.BLOCK_DIV,pivot.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
+        shapeRenderer.setColor(Color.RED);
+        for(Vector2 vector:bodyList) {
+            shapeRenderer.rect(vector.x * TetrisGame.BLOCK_DIV,vector.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
+        }
+    }
 
     public Color getColor() {
         return color;
@@ -48,14 +56,7 @@ public abstract class Tetromino {
         this.pivot = pivot;
     }
 
-    public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.GOLD);
-        shapeRenderer.rect(pivot.x * TetrisGame.BLOCK_DIV,pivot.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
-        shapeRenderer.setColor(Color.RED);
-        for(Vector2 vector:bodyList) {
-            shapeRenderer.rect(vector.x * TetrisGame.BLOCK_DIV,vector.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
-        }
-    }
+
 }
 
 

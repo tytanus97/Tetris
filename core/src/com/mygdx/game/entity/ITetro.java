@@ -9,7 +9,6 @@ public class ITetro extends Tetromino{
 
 
     public ITetro() {
-
         init();
     }
 
@@ -27,10 +26,4 @@ public class ITetro extends Tetromino{
 
     }
 
-    public void update(float dt) {
-        pivot.y-=1;
-        for(Vector2 vector:bodyList) {
-            vector.y-=1;
-        }
-    }
 }
