@@ -20,6 +20,7 @@ public class PlayScreen extends AbstractScreen{
     private BoardController boardController;
     private Board board;
     private Tetromino tetromino;
+    private float tickTime;
 
     public PlayScreen(TetrisGame tetrisGame) {
         super(tetrisGame);
@@ -37,6 +38,7 @@ public class PlayScreen extends AbstractScreen{
         moveController = new MoveController();
         boardController = new BoardController();
         board = new Board();
+        tickTime = 0.5f;
 
 
     }
@@ -61,8 +63,9 @@ public class PlayScreen extends AbstractScreen{
 
         }
         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            tetromino = moveController.moveDown(tetromino);
+            this.tickTime = 0.02f;
         }
+        else this.tickTime = 0.5f;
     }
 
     private void draw() {
@@ -95,7 +98,7 @@ public class PlayScreen extends AbstractScreen{
 
         this.board = (boardController.syncBoard(tetromino,this.board));
         timer +=delta;
-        if(timer > 0.5f) {
+        if(timer > tickTime) {
             checkColisionWithGround();
             this.board.printBoard();
             tetromino = moveController.moveDown(tetromino);
