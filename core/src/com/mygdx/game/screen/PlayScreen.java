@@ -57,11 +57,13 @@ public class PlayScreen extends AbstractScreen{
     }
 
     private void checkInput() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A ) ) {
+        System.out.println("out of bounds: "+(outOfBounds()));
+        System.out.println("can move left:"+!canMoveSide(-1));
+        if(Gdx.input.isKeyJustPressed(Input.Keys.A) && !canMoveSide(-1) && !outOfBounds()) {
             moveController.move(tetromino,-1);
 
         }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.D)  && !canMoveSide(1) && !outOfBounds()) {
             moveController.move(tetromino,1);
 
         }
@@ -69,6 +71,30 @@ public class PlayScreen extends AbstractScreen{
             this.tickTime = 0.02f;
         }
         else this.tickTime = 0.5f;
+    }
+
+    private boolean outOfBounds() {
+        for(Block block:tetromino.getBlockList()) {
+            if(block.getPos().x <=0 || block.getPos().x+1 >=this.board.getWidth()) {
+                System.out.println(block.getPos().x);
+                System.out.println(block.getPos().x+TetrisGame.BLOCK_SIZE);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean canMoveSide(int direction) {
+
+        for(Block boardBlock: board.getBlocks()) {
+            for(Block tetroBlock: tetromino.getBlockList()) {
+                if(tetroBlock.getPos().x+direction == boardBlock.getPos().x
+                        && tetroBlock.getPos().y == boardBlock.getPos().y) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void draw() {
@@ -99,15 +125,36 @@ public class PlayScreen extends AbstractScreen{
 
         shapeRenderer.setProjectionMatrix(sb.getProjectionMatrix());
 
-
-
         this.board = (boardController.syncBoard(tetromino,this.board));
         timer +=delta;
         if(timer > tickTime) {
             checkColisionWithGround();
+            checkVerticalCollisionWithBlocks();
             this.board.printBoard();
             tetromino = moveController.moveDown(tetromino);
             System.out.println(tetromino.getPivot().y+" "+tetromino.getPivot().x);
+            timer = 0f;
+        }
+    }
+
+
+    private void checkVerticalCollisionWithBlocks() {
+
+        boolean collision = false;
+
+        for(Block boardBlock: board.getBlocks()) {
+            for(Block tetroBlock: tetromino.getBlockList()) {
+                if(tetroBlock.getPos().y-1 == boardBlock.getPos().y
+                        && tetroBlock.getPos().x == boardBlock.getPos().x) {
+                    collision = true;
+                    break;
+                }
+            }
+            if(collision) break;
+        }
+        if(collision) {
+            this.board.setTetroToBoard(this.tetromino);
+            this.tetromino = tetrominoController.getRandomTetromino();
             timer = 0f;
         }
     }
@@ -126,7 +173,6 @@ public class PlayScreen extends AbstractScreen{
             //tetromino.realocate(new Vector2(5,18));
             this.tetromino = tetrominoController.getRandomTetromino();
             timer = 0;
-
         }
     }
 

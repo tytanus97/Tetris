@@ -1,7 +1,6 @@
 package com.mygdx.game.entity.board;
 
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
@@ -68,6 +67,14 @@ public class Board {
 
     public void setBoard(int[][] board) {
         this.board = board;
+    }
+
+    public List<Block> getBlocks() {
+        return blocks;
+    }
+
+    public void setBlocks(List<Block> blocks) {
+        this.blocks = blocks;
     }
 
     public void setTetroToBoard(Tetromino tetromino) {
