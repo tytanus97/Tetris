@@ -1,22 +1,23 @@
 package com.mygdx.game.entity.tetro;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.ArrayList;
 
     public class ITetro extends Tetromino {
 
+
     public ITetro() {
+        this.color =  Color.YELLOW;
         init();
     }
 
     @Override
     protected void init() {
-        bodyList = new ArrayList<Vector2>();
+        blockList = new ArrayList<Block>();
         pivot = new Vector2(5,19);
-        bodyList.add(new Vector2(pivot.x,pivot.y+1));
-        bodyList.add(new Vector2(pivot.x,pivot.y+2));
-        bodyList.add(new Vector2(pivot.x,pivot.y-1));
+        addBlocks();
 
     }
     @Override
@@ -29,11 +30,16 @@ import java.util.ArrayList;
 
         pivot.set(vector2);
 
-            bodyList.clear();
-         bodyList.add(new Vector2(pivot.x,pivot.y+2));
-         bodyList.add(new Vector2(pivot.x,pivot.y-1));
-         bodyList.add(new Vector2(pivot.x,pivot.y+1));
+        blockList.clear();
+        addBlocks();
 
+    }
+
+    private void addBlocks() {
+        blockList.add(new Block(new Vector2().set(pivot.x,pivot.y),color));
+        blockList.add(new Block(new Vector2().set(pivot.x,pivot.y+1),color));
+        blockList.add(new Block(new Vector2().set(pivot.x,pivot.y+2),color));
+        blockList.add(new Block(new Vector2().set(pivot.x,pivot.y-1),color));
     }
 
 }

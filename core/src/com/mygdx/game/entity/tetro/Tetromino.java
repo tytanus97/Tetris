@@ -11,7 +11,7 @@ import java.util.List;
 public abstract class Tetromino {
 
     protected Color color;
-    protected List<Vector2> bodyList;
+    protected List<Block> blockList;
     protected Vector2 pivot;
     protected int blockSize;
 
@@ -20,15 +20,14 @@ public abstract class Tetromino {
         init();
     }
 
+
     protected abstract void init();
     protected abstract void rotate();
 
     public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.GOLD);
-        shapeRenderer.rect(pivot.x * TetrisGame.BLOCK_DIV,pivot.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
-        shapeRenderer.setColor(Color.RED);
-        for(Vector2 vector:bodyList) {
-            shapeRenderer.rect(vector.x * TetrisGame.BLOCK_DIV,vector.y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
+        shapeRenderer.setColor(this.color);
+        for(Block block:blockList) {
+            shapeRenderer.rect(block.getPos().x * TetrisGame.BLOCK_DIV,block.getPos().y * TetrisGame.BLOCK_DIV,blockSize,blockSize);
         }
     }
 
@@ -40,12 +39,12 @@ public abstract class Tetromino {
         this.color = color;
     }
 
-    public List<Vector2> getBodyList() {
-        return bodyList;
+    public List<Block> getBlockList() {
+        return blockList;
     }
 
-    public void setBodyList(List<Vector2> bodyList) {
-        this.bodyList = bodyList;
+    public void setBodyList(List<Block> blockList) {
+        this.blockList = blockList;
     }
 
     public Vector2 getPivot() {
@@ -55,7 +54,6 @@ public abstract class Tetromino {
     public void setPivot(Vector2 pivot) {
         this.pivot = pivot;
     }
-
 
     public abstract void realocate(Vector2 vector2);
 }

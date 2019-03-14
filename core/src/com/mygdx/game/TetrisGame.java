@@ -9,6 +9,7 @@ public class TetrisGame extends Game {
 	public static final int GAME_WIDTH = 500;
 	public static final int GAME_HEIGHT = 950;
 	public static final int BLOCK_DIV = 50;
+	public  static final int BLOCK_SIZE = 50;
 	public static final String TITLE = "Tetris";
 
 	private boolean isPaused = false;

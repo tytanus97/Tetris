@@ -8,9 +8,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
 import com.mygdx.game.controller.BoardController;
 import com.mygdx.game.controller.MoveController;
+import com.mygdx.game.controller.TetrominoController;
 import com.mygdx.game.entity.board.Board;
-import com.mygdx.game.entity.tetro.ITetro;
-import com.mygdx.game.entity.tetro.Tetromino;
+import com.mygdx.game.entity.tetro.*;
 
 public class PlayScreen extends AbstractScreen{
 
@@ -21,13 +21,15 @@ public class PlayScreen extends AbstractScreen{
     private Board board;
     private Tetromino tetromino;
     private float tickTime;
+    private TetrominoController tetrominoController;
 
     public PlayScreen(TetrisGame tetrisGame) {
         super(tetrisGame);
-        tetromino  = new ITetro();
+
+        tetromino  = tetrominoController.getRandomTetromino();
+
         this.board.clearBoard();
         this.board.printBoard();
-
         this.board = (boardController.syncBoard(tetromino,this.board));
     }
 
@@ -37,6 +39,7 @@ public class PlayScreen extends AbstractScreen{
         shapeRenderer = new ShapeRenderer();
         moveController = new MoveController();
         boardController = new BoardController();
+        tetrominoController = new TetrominoController();
         board = new Board();
         tickTime = 0.5f;
 
@@ -54,7 +57,7 @@ public class PlayScreen extends AbstractScreen{
     }
 
     private void checkInput() {
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A) ) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.A ) ) {
             moveController.move(tetromino,-1);
 
         }
@@ -82,11 +85,13 @@ public class PlayScreen extends AbstractScreen{
         shapeRenderer.setColor(Color.BLACK);
         for(int i=1;i<(TetrisGame.GAME_WIDTH/TetrisGame.BLOCK_DIV);i++)
         {
-            shapeRenderer.rectLine(new Vector2(i* TetrisGame.BLOCK_DIV,0),new Vector2(i*TetrisGame.BLOCK_DIV,TetrisGame.GAME_HEIGHT),1);
+            shapeRenderer.rectLine(new Vector2(i* TetrisGame.BLOCK_DIV,0)
+                                    ,new Vector2(i*TetrisGame.BLOCK_DIV,TetrisGame.GAME_HEIGHT),1);
         }
         for(int i=1;i<(TetrisGame.GAME_HEIGHT/TetrisGame.BLOCK_DIV);i++)
         {
-            shapeRenderer.rectLine(new Vector2(0,i*TetrisGame.BLOCK_DIV),new Vector2(TetrisGame.GAME_WIDTH,i*TetrisGame.BLOCK_DIV),1);
+            shapeRenderer.rectLine(new Vector2(0,i*TetrisGame.BLOCK_DIV)
+                                    ,new Vector2(TetrisGame.GAME_WIDTH,i*TetrisGame.BLOCK_DIV),1);
         }
     }
 
@@ -111,18 +116,20 @@ public class PlayScreen extends AbstractScreen{
 
         boolean touchedGround = false;
 
-        for(Vector2 body:tetromino.getBodyList()) {
-            if(body.y == 0) touchedGround = true;
+        for(Block block:tetromino.getBlockList()) {
+            if(block.getPos().y <= 0) touchedGround = true;
         }
         if(tetromino.getPivot().y <= 0) touchedGround = true;
 
         if(touchedGround) {
             board.setTetroToBoard(tetromino);
-            tetromino.realocate(new Vector2(5,18));
+            //tetromino.realocate(new Vector2(5,18));
+            this.tetromino = tetrominoController.getRandomTetromino();
             timer = 0;
 
         }
     }
+
 
 }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
+import com.mygdx.game.entity.tetro.Block;
 import com.mygdx.game.entity.tetro.Tetromino;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class Board {
 
-    private List<Vector2> blocks;
+    private List<Block> blocks;
     private int width;
     private int height;
     private int[][] board;
@@ -23,7 +24,7 @@ public class Board {
         this.width = TetrisGame.GAME_WIDTH / TetrisGame.BLOCK_DIV;
         this.height = TetrisGame.GAME_HEIGHT / TetrisGame.BLOCK_DIV;
         this.board = new int[height][width];
-        this.blocks = new ArrayList<Vector2>();
+        this.blocks = new ArrayList<Block>();
 
     }
 
@@ -71,19 +72,24 @@ public class Board {
 
     public void setTetroToBoard(Tetromino tetromino) {
 
-        this.blocks.add(new Vector2().set(tetromino.getPivot()));
-        for(Vector2 block:tetromino.getBodyList()) {
-            this.blocks.add(new Vector2().set(block.x,block.y));
+        //setting rest tetromino blocks to block list
+        for(Block block:tetromino.getBlockList()) {
+            this.blocks.add(new Block(new Vector2(block.getPos().x,block.getPos().y),tetromino.getColor()));
         }
 
     }
 
     public void draw(ShapeRenderer shapeRenderer) {
-        shapeRenderer.setColor(Color.BLUE);
 
-        for(Vector2 block:blocks) {
-            shapeRenderer.rect(block.x*TetrisGame.BLOCK_DIV,block.y*TetrisGame.BLOCK_DIV,50,50);
+        for(Block block:blocks) {
+            shapeRenderer.setColor(block.getColor());
+            shapeRenderer.rect(block.getPos().x*TetrisGame.BLOCK_DIV,block.getPos().y*TetrisGame.BLOCK_DIV
+                    ,TetrisGame.BLOCK_SIZE,TetrisGame.BLOCK_SIZE);
         }
+    }
+
+    public boolean canMoveLeft(List<Vector2> bodyList) {
+        return true;
     }
 }
 
