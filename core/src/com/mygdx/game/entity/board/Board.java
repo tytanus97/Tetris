@@ -24,7 +24,7 @@ public class Board {
         this.height = TetrisGame.GAME_HEIGHT / TetrisGame.BLOCK_DIV;
         this.board = new int[height][width];
         this.blocks = new ArrayList<Vector2>();
-        
+
     }
 
     public void printBoard() {

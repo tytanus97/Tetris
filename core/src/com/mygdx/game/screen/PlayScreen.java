@@ -118,6 +118,7 @@ public class PlayScreen extends AbstractScreen{
 
         if(touchedGround) {
             board.setTetroToBoard(tetromino);
+
             tetromino.realocate(new Vector2(5,18));
             timer = 0;
 
