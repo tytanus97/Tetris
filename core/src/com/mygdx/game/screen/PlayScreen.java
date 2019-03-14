@@ -111,14 +111,13 @@ public class PlayScreen extends AbstractScreen{
 
         boolean touchedGround = false;
 
-        /*for(Vector2 body:tetromino.getBodyList()) {
+        for(Vector2 body:tetromino.getBodyList()) {
             if(body.y == 0) touchedGround = true;
-        }*/
+        }
         if(tetromino.getPivot().y <= 0) touchedGround = true;
 
         if(touchedGround) {
             board.setTetroToBoard(tetromino);
-
             tetromino.realocate(new Vector2(5,18));
             timer = 0;
 

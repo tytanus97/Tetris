@@ -13,9 +13,9 @@ public class BoardController {
 
         board.clearBoard();
         try {
-            /*for (Vector2 body : tetromino.getBodyList()) {
+            for (Vector2 body : tetromino.getBodyList()) {
                 board.getBoard()[(int) (board.getHeight()-body.y)][(int) body.x] = 1;
-            }*/
+            }
             board.getBoard()[(int)(board.getHeight()-tetromino.getPivot().y)][(int)(tetromino.getPivot().x)] = 1;
             board.getBoard()[(int) (board.getHeight()-tetromino.getPivot().y)][(int) tetromino.getPivot().x] = 1;
         }catch(IndexOutOfBoundsException e) {

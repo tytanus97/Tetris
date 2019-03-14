@@ -14,9 +14,9 @@ import java.util.ArrayList;
     protected void init() {
         bodyList = new ArrayList<Vector2>();
         pivot = new Vector2(5,19);
-       // bodyList.add(new Vector2(5,18));//new Vector2(pivot.x,pivot.y));
-       // bodyList.add(new Vector2(pivot.x,pivot.y+2));
-       // bodyList.add(new Vector2(pivot.x,pivot.y-1));
+        bodyList.add(new Vector2(pivot.x,pivot.y+1));
+        bodyList.add(new Vector2(pivot.x,pivot.y+2));
+        bodyList.add(new Vector2(pivot.x,pivot.y-1));
 
     }
     @Override
@@ -28,11 +28,11 @@ import java.util.ArrayList;
     public void realocate(Vector2 vector2) {
 
         pivot.set(vector2);
-        /*for(Vector2 body:bodyList) {
-            body.set(vector2);
-        }*/
-        // bodyList.add(new Vector2(pivot.x,pivot.y+2));
-        // bodyList.add(new Vector2(pivot.x,pivot.y-1));
+
+            bodyList.clear();
+         bodyList.add(new Vector2(pivot.x,pivot.y+2));
+         bodyList.add(new Vector2(pivot.x,pivot.y-1));
+         bodyList.add(new Vector2(pivot.x,pivot.y+1));
 
     }
 

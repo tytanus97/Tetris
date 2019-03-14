@@ -72,6 +72,9 @@ public class Board {
     public void setTetroToBoard(Tetromino tetromino) {
 
         this.blocks.add(new Vector2().set(tetromino.getPivot()));
+        for(Vector2 block:tetromino.getBodyList()) {
+            this.blocks.add(new Vector2().set(block.x,block.y));
+        }
 
     }
 
