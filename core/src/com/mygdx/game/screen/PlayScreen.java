@@ -2,7 +2,10 @@ package com.mygdx.game.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
@@ -22,17 +25,16 @@ public class PlayScreen extends AbstractScreen{
     private Tetromino tetromino;
     private float tickTime;
     private TetrominoController tetrominoController;
+    private Music music;
+
 
     public PlayScreen(TetrisGame tetrisGame) {
         super(tetrisGame);
 
         tetromino  = tetrominoController.getRandomTetromino();
-
-        this.board.clearBoard();
-        this.board.printBoard();
-        this.board = (boardController.syncBoard(tetromino,this.board));
+        music = Gdx.audio.newMusic(Gdx.files.internal("./music/tetris.mp3"));
+        music.play();
     }
-
 
     @Override
     protected void init() {
@@ -40,10 +42,10 @@ public class PlayScreen extends AbstractScreen{
         moveController = new MoveController();
         boardController = new BoardController();
         tetrominoController = new TetrominoController();
+
+
         board = new Board();
         tickTime = 0.5f;
-
-
     }
 
     @Override
@@ -52,18 +54,15 @@ public class PlayScreen extends AbstractScreen{
         checkInput();
         update(delta);
         draw();
-
-
     }
 
     private void checkInput() {
-        System.out.println("out of bounds: "+(outOfBounds()));
-        System.out.println("can move left:"+!canMoveSide(-1));
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A) && !canMoveSide(-1) && !outOfBounds()) {
+
+        if(Gdx.input.isKeyJustPressed(Input.Keys.A) && canMoveSide(-1) && onLeftBound()) {
             moveController.move(tetromino,-1);
 
         }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.D)  && !canMoveSide(1) && !outOfBounds()) {
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.D)  && canMoveSide(1) && onRightBound()) {
             moveController.move(tetromino,1);
 
         }
@@ -73,15 +72,21 @@ public class PlayScreen extends AbstractScreen{
         else this.tickTime = 0.5f;
     }
 
-    private boolean outOfBounds() {
+    private boolean onLeftBound() {
         for(Block block:tetromino.getBlockList()) {
-            if(block.getPos().x <=0 || block.getPos().x+1 >=this.board.getWidth()) {
-                System.out.println(block.getPos().x);
-                System.out.println(block.getPos().x+TetrisGame.BLOCK_SIZE);
-                return true;
+            if(block.getPos().x <=0) {
+                return false;
             }
         }
-        return false;
+        return true;
+    }
+    private boolean onRightBound() {
+        for(Block block:tetromino.getBlockList()) {
+            if(block.getPos().x+1 >=this.board.getWidth()) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private boolean canMoveSide(int direction) {
@@ -90,11 +95,11 @@ public class PlayScreen extends AbstractScreen{
             for(Block tetroBlock: tetromino.getBlockList()) {
                 if(tetroBlock.getPos().x+direction == boardBlock.getPos().x
                         && tetroBlock.getPos().y == boardBlock.getPos().y) {
-                    return true;
+                    return false;
                 }
             }
         }
-        return false;
+        return true;
     }
 
     private void draw() {
@@ -123,16 +128,14 @@ public class PlayScreen extends AbstractScreen{
 
     private void update(float delta) {
 
-        shapeRenderer.setProjectionMatrix(sb.getProjectionMatrix());
+        //shapeRenderer.setProjectionMatrix(sb.getProjectionMatrix());
 
         this.board = (boardController.syncBoard(tetromino,this.board));
         timer +=delta;
         if(timer > tickTime) {
             checkColisionWithGround();
             checkVerticalCollisionWithBlocks();
-            this.board.printBoard();
             tetromino = moveController.moveDown(tetromino);
-            System.out.println(tetromino.getPivot().y+" "+tetromino.getPivot().x);
             timer = 0f;
         }
     }
@@ -175,7 +178,10 @@ public class PlayScreen extends AbstractScreen{
             timer = 0;
         }
     }
+    public void dispose() {
+        music.dispose();
 
+    }
 
 }
 

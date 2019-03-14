@@ -36,8 +36,8 @@ public class ZTetro extends Tetromino{
 
     private void addBlocks() {
         blockList.add(new Block(new Vector2().set(pivot.x,pivot.y),color));
+        blockList.add(new Block(new Vector2().set(pivot.x+1,pivot.y),color));
         blockList.add(new Block(new Vector2().set(pivot.x,pivot.y+1),color));
-        blockList.add(new Block(new Vector2().set(pivot.x+1,pivot.y+1),color));
-        blockList.add(new Block(new Vector2().set(pivot.x-1,pivot.y),color));
+        blockList.add(new Block(new Vector2().set(pivot.x-1,pivot.y+1),color));
     }
 }

@@ -6,6 +6,7 @@ public class TetrominoController {
 
     private Tetromino randTetro;
     private int randomNumber;
+    int prevNumber = 0;
 
     public TetrominoController() {
 
@@ -13,7 +14,15 @@ public class TetrominoController {
 
     public Tetromino getRandomTetromino() {
 
-        randomNumber = (int)(Math.random()*7)+1;
+        do{
+            randomNumber = (int)(Math.random()*7)+1;
+        }while(prevNumber == randomNumber);
+
+        System.out.println("prev num: "+prevNumber);
+
+        prevNumber = randomNumber;
+
+        System.out.println("rand num: "+randomNumber);
 
         switch(randomNumber) {
             case 1:randTetro = new ITetro();break;
