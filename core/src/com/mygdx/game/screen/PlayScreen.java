@@ -32,8 +32,10 @@ public class PlayScreen extends AbstractScreen{
         super(tetrisGame);
 
         tetromino  = tetrominoController.getRandomTetromino();
-       // music = Gdx.audio.newMusic(Gdx.files.internal("./music/tetris.mp3"));
-       //    music.play();
+        music = Gdx.audio.newMusic(Gdx.files.internal("./music/tetris.mp3"));
+        music.setLooping(true);
+           music.play();
+
     }
 
     @Override
@@ -72,6 +74,9 @@ public class PlayScreen extends AbstractScreen{
         else this.tickTime = 0.5f;
         if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
             tetrominoController.rotateLeft(this.tetromino);
+        }
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
+            tetrominoController.rotateRight(this.tetromino);
         }
     }
 
