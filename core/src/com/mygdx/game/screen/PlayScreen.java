@@ -114,25 +114,11 @@ public class PlayScreen extends AbstractScreen{
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         tetromino.draw(shapeRenderer);
         board.draw(shapeRenderer);
-        drawLines(shapeRenderer);
+        board.drawLines(shapeRenderer);
         shapeRenderer.end();
 
     }
 
-    private void drawLines(ShapeRenderer shapeRenderer) {
-
-        shapeRenderer.setColor(Color.BLACK);
-        for(int i=1;i<(TetrisGame.GAME_WIDTH/TetrisGame.BLOCK_DIV);i++)
-        {
-            shapeRenderer.rectLine(new Vector2(i* TetrisGame.BLOCK_DIV,0)
-                                    ,new Vector2(i*TetrisGame.BLOCK_DIV,TetrisGame.GAME_HEIGHT),1);
-        }
-        for(int i=1;i<(TetrisGame.GAME_HEIGHT/TetrisGame.BLOCK_DIV);i++)
-        {
-            shapeRenderer.rectLine(new Vector2(0,i*TetrisGame.BLOCK_DIV)
-                                    ,new Vector2(TetrisGame.GAME_WIDTH,i*TetrisGame.BLOCK_DIV),1);
-        }
-    }
 
     private void update(float delta) {
 

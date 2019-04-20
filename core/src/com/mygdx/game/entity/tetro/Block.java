@@ -24,6 +24,21 @@ public class Block implements Comparable{
         this.pos = pos;
     }
 
+    public void setPos(float x,float y) {
+        this.pos.x = x;
+        this.pos.y = y;
+    }
+
+    public float getX() {return pos.x;}
+
+    public void setX(float x) {pos.x = x;}
+
+    public float getY() {return pos.y;}
+
+    public void setY(float y) {pos.y = y;}
+
+
+
     public Color getColor() {
         return color;
     }

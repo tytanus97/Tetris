@@ -1,6 +1,7 @@
 package com.mygdx.game.entity.board;
 
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
@@ -78,18 +79,18 @@ public class Board {
     public void setTetroToBoard(Tetromino tetromino) {
 
         //setting rest tetromino blocks to block list
-        for(Block block:tetromino.getBlockList()) {
-            this.blocks.add(new Block(new Vector2(block.getPos().x,block.getPos().y),tetromino.getColor()));
+        for (Block block : tetromino.getBlockList()) {
+            this.blocks.add(new Block(new Vector2(block.getPos().x, block.getPos().y), tetromino.getColor()));
         }
 
     }
 
     public void draw(ShapeRenderer shapeRenderer) {
 
-        for(Block block:blocks) {
+        for (Block block : blocks) {
             shapeRenderer.setColor(block.getColor());
-            shapeRenderer.rect(block.getPos().x*TetrisGame.BLOCK_DIV,block.getPos().y*TetrisGame.BLOCK_DIV
-                    ,TetrisGame.BLOCK_SIZE,TetrisGame.BLOCK_SIZE);
+            shapeRenderer.rect(block.getPos().x * TetrisGame.BLOCK_DIV, block.getPos().y * TetrisGame.BLOCK_DIV
+                    , TetrisGame.BLOCK_SIZE, TetrisGame.BLOCK_SIZE);
         }
     }
 
@@ -97,6 +98,11 @@ public class Board {
     public void scoreBoard() {
 
         Collections.sort(this.blocks);
+        System.out.println("Przed usunieciem");
+        for (Block block:this.blocks) {
+            System.out.print((int)block.getY());
+        }
+        System.out.println("");
 
         List<Integer> levelsToRemove = new ArrayList<Integer>();
 
@@ -106,37 +112,77 @@ public class Board {
 
             if (block.getPos().y == level) {
                 counter++;
-            }
-            else if(counter == 10) {
+            } else if (counter == 10) {
                 levelsToRemove.add(level);
                 counter = 1;
                 level++;
-            }
-            else {
+            } else {
                 counter = 1;
                 level++;
             }
 
         }
-        System.out.println("levels to remove" + levelsToRemove.toString());
+
         removeBlocks(levelsToRemove);
+        System.out.println(levelsToRemove.toString());
+        System.out.println("Po usunieciu");
+        for (Block block:this.blocks) {
+            System.out.print((int)block.getY());
+        }
+        System.out.println("");
+        updateBoard(levelsToRemove);
+        System.out.println("Po updacie");
+        for (Block block:this.blocks) {
+            System.out.print((int)block.getY());
+        }
+        System.out.println("");
 
     }
+
+    private void updateBoard(List<Integer> levelsToRemove) {
+
+        for(int i=0;i<levelsToRemove.size();i++) {
+            for(Block block:this.blocks) {
+                if(block.getY() > levelsToRemove.get(i)) {
+                    block.setPos(block.getPos().x, block.getPos().y - 1);
+                }
+            }
+            for(int j=i+1;j<levelsToRemove.size();j++) {
+                levelsToRemove.set(j,levelsToRemove.get(j)-1);
+            }
+        }
+
+    }
+
 
     private void removeBlocks(List<Integer> levelsToRemove) {
 
 
         List<Block> blockToRemove = new ArrayList<Block>();
 
-        for(int i:levelsToRemove) {
-            for(Block block :this.blocks) {
-                if(block.getPos().y == i) {
+        for (int i : levelsToRemove) {
+            for (Block block : this.blocks) {
+                if (block.getPos().y == i) {
                     blockToRemove.add(block);
-                    }
                 }
             }
+        }
         this.blocks.removeAll(blockToRemove);
+    }
+
+
+    public void drawLines(ShapeRenderer shapeRenderer) {
+
+        shapeRenderer.setColor(Color.BLACK);
+        for (int i = 1; i < (TetrisGame.GAME_WIDTH / TetrisGame.BLOCK_DIV); i++) {
+            shapeRenderer.rectLine(new Vector2(i * TetrisGame.BLOCK_DIV, 0)
+                    , new Vector2(i * TetrisGame.BLOCK_DIV, TetrisGame.GAME_HEIGHT), 1);
+        }
+        for (int i = 1; i < (TetrisGame.GAME_HEIGHT / TetrisGame.BLOCK_DIV); i++) {
+            shapeRenderer.rectLine(new Vector2(0, i * TetrisGame.BLOCK_DIV)
+                    , new Vector2(TetrisGame.GAME_WIDTH, i * TetrisGame.BLOCK_DIV), 1);
         }
     }
+}
 
 
