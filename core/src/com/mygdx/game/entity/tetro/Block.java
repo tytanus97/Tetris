@@ -3,7 +3,7 @@ package com.mygdx.game.entity.tetro;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 
-public class Block {
+public class Block implements Comparable{
 
     private Vector2 pos;
     private Color color;
@@ -30,5 +30,13 @@ public class Block {
 
     public void setColor(Color color) {
         this.color = color;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+
+        float difference = ((Block)o).pos.y;
+
+        return (int)(this.pos.y - difference);
     }
 }

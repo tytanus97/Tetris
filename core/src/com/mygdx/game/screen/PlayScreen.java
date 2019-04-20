@@ -32,9 +32,9 @@ public class PlayScreen extends AbstractScreen{
         super(tetrisGame);
 
         tetromino  = tetrominoController.getRandomTetromino();
-        music = Gdx.audio.newMusic(Gdx.files.internal("./music/tetris.mp3"));
-        music.setLooping(true);
-           music.play();
+       // music = Gdx.audio.newMusic(Gdx.files.internal("./music/tetris.mp3"));
+        /*music.setLooping(true);
+           music.play();*/
 
     }
 
@@ -165,6 +165,7 @@ public class PlayScreen extends AbstractScreen{
         }
         if(collision) {
             this.board.setTetroToBoard(this.tetromino);
+            this.board.scoreBoard();
             this.tetromino = tetrominoController.getRandomTetromino();
             timer = 0f;
         }
@@ -181,9 +182,11 @@ public class PlayScreen extends AbstractScreen{
 
         if(touchedGround) {
             board.setTetroToBoard(tetromino);
+            this.board.scoreBoard();
             //tetromino.realocate(new Vector2(5,18));
             this.tetromino = tetrominoController.getRandomTetromino();
             timer = 0;
+
         }
     }
     public void dispose() {

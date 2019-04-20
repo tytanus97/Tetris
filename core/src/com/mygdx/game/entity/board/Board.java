@@ -7,9 +7,7 @@ import com.mygdx.game.TetrisGame;
 import com.mygdx.game.entity.tetro.Block;
 import com.mygdx.game.entity.tetro.Tetromino;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Board {
 
@@ -95,8 +93,50 @@ public class Board {
         }
     }
 
-    public boolean canMoveLeft(List<Vector2> bodyList) {
-        return true;
+
+    public void scoreBoard() {
+
+        Collections.sort(this.blocks);
+
+        List<Integer> levelsToRemove = new ArrayList<Integer>();
+
+        int counter = 0;
+        int level = 0;
+        for (Block block : this.blocks) {
+
+            if (block.getPos().y == level) {
+                counter++;
+            }
+            else if(counter == 10) {
+                levelsToRemove.add(level);
+                counter = 1;
+                level++;
+            }
+            else {
+                counter = 1;
+                level++;
+            }
+
+        }
+        System.out.println("levels to remove" + levelsToRemove.toString());
+        removeBlocks(levelsToRemove);
+
     }
-}
+
+    private void removeBlocks(List<Integer> levelsToRemove) {
+
+
+        List<Block> blockToRemove = new ArrayList<Block>();
+
+        for(int i:levelsToRemove) {
+            for(Block block :this.blocks) {
+                if(block.getPos().y == i) {
+                    blockToRemove.add(block);
+                    }
+                }
+            }
+        this.blocks.removeAll(blockToRemove);
+        }
+    }
+
 
