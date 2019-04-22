@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
 import com.mygdx.game.entity.tetro.Block;
 import com.mygdx.game.entity.tetro.Tetromino;
+import com.mygdx.game.screen.PlayScreen;
 
 import java.util.*;
 
@@ -168,6 +169,9 @@ public class Board {
             }
         }
         this.blocks.removeAll(blockToRemove);
+        if(!blockToRemove.isEmpty()) {
+            PlayScreen.POINTS+=5*blockToRemove.size()/10;
+        }
     }
 
 

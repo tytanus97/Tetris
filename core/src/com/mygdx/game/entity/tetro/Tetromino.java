@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
+import com.mygdx.game.entity.board.Board;
 
 import java.util.List;
 
@@ -56,6 +57,37 @@ public abstract class Tetromino {
     }
 
     public abstract void realocate(Vector2 vector2);
+
+    public boolean onLeftBound() {
+        for(Block block:this.blockList) {
+            if(block.getPos().x <=0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean onRightBound(int boardWidth) {
+        for(Block block:this.getBlockList()) {
+            if(block.getPos().x+1 >=boardWidth) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean canMoveSide(int direction,List<Block> boardBlocks) {
+
+        for(Block boardBlock: boardBlocks) {
+            for(Block tetroBlock: this.blockList) {
+                if(tetroBlock.getPos().x+direction == boardBlock.getPos().x
+                        && tetroBlock.getPos().y == boardBlock.getPos().y) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
 

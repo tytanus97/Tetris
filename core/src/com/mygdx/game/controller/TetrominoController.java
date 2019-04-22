@@ -46,28 +46,13 @@ public class TetrominoController {
     }
 
 
-    public void rotateLeft(Tetromino tetromino) {
-
-
+    public void rotate(Tetromino tetromino,int dir) {
         for(Block block:tetromino.getBlockList()) {
             tmpVector.set(tetromino.getPivot().x - block.getPos().x,tetromino.getPivot().y - block.getPos().y);
 
-            tmpVector = transformVector(tmpVector,leftRotationMatrix);
+            tmpVector = transformVector(tmpVector, dir == 0 ? leftRotationMatrix : rightRotationMatrix);
             block.getPos().set(tetromino.getPivot().x+tmpVector.x,tetromino.getPivot().y+tmpVector.y);
         }
-
-
-    }
-    public void rotateRight(Tetromino tetromino) {
-
-
-        for(Block block:tetromino.getBlockList()) {
-            tmpVector.set(tetromino.getPivot().x - block.getPos().x,tetromino.getPivot().y - block.getPos().y);
-            tmpVector = transformVector(tmpVector,rightRotationMatrix);
-            block.getPos().set(tetromino.getPivot().x+tmpVector.x,tetromino.getPivot().y+tmpVector.y);
-        }
-
-
     }
 
     private Vector2 transformVector(Vector2 tmpVector,int[][] transformation) {

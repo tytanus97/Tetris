@@ -17,6 +17,9 @@ import com.mygdx.game.entity.tetro.*;
 
 public class PlayScreen extends AbstractScreen{
 
+
+    public static int POINTS = 0;
+
     private ShapeRenderer shapeRenderer;
     private float timer = 0;
     private MoveController moveController;
@@ -26,6 +29,8 @@ public class PlayScreen extends AbstractScreen{
     private float tickTime;
     private TetrominoController tetrominoController;
     private Music music;
+    private Hud hud;
+
 
 
     public PlayScreen(TetrisGame tetrisGame) {
@@ -36,6 +41,7 @@ public class PlayScreen extends AbstractScreen{
         /*music.setLooping(true);
            music.play();*/
 
+
     }
 
     @Override
@@ -44,7 +50,7 @@ public class PlayScreen extends AbstractScreen{
         moveController = new MoveController();
         boardController = new BoardController();
         tetrominoController = new TetrominoController();
-
+        hud = new Hud(this.game.sb);
 
         board = new Board();
         tickTime = 0.5f;
@@ -56,15 +62,19 @@ public class PlayScreen extends AbstractScreen{
         checkInput();
         update(delta);
         draw();
+        this.game.sb.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
     }
 
     private void checkInput() {
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.A) && canMoveSide(-1) && onLeftBound()) {
+        if(Gdx.input.isKeyJustPressed(Input.Keys.A) && this.tetromino.canMoveSide(-1,board.getBlocks())
+                && this.tetromino.onLeftBound()) {
             moveController.move(tetromino,-1);
 
         }
-        else if(Gdx.input.isKeyJustPressed(Input.Keys.D)  && canMoveSide(1) && onRightBound()) {
+        else if(Gdx.input.isKeyJustPressed(Input.Keys.D)  && this.tetromino.canMoveSide(1,board.getBlocks())
+                && this.tetromino.onRightBound(this.board.getWidth())) {
             moveController.move(tetromino,1);
 
         }
@@ -73,42 +83,17 @@ public class PlayScreen extends AbstractScreen{
         }
         else this.tickTime = 0.5f;
         if(Gdx.input.isKeyJustPressed(Input.Keys.Q)) {
-            tetrominoController.rotateLeft(this.tetromino);
+            tetrominoController.rotate(this.tetromino,0);
         }
         else if(Gdx.input.isKeyJustPressed(Input.Keys.E)) {
-            tetrominoController.rotateRight(this.tetromino);
+            tetrominoController.rotate(this.tetromino,1);
         }
     }
 
-    private boolean onLeftBound() {
-        for(Block block:tetromino.getBlockList()) {
-            if(block.getPos().x <=0) {
-                return false;
-            }
-        }
-        return true;
-    }
-    private boolean onRightBound() {
-        for(Block block:tetromino.getBlockList()) {
-            if(block.getPos().x+1 >=this.board.getWidth()) {
-                return false;
-            }
-        }
-        return true;
-    }
 
-    private boolean canMoveSide(int direction) {
 
-        for(Block boardBlock: board.getBlocks()) {
-            for(Block tetroBlock: tetromino.getBlockList()) {
-                if(tetroBlock.getPos().x+direction == boardBlock.getPos().x
-                        && tetroBlock.getPos().y == boardBlock.getPos().y) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+
+
 
     private void draw() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -132,6 +117,8 @@ public class PlayScreen extends AbstractScreen{
             tetromino = moveController.moveDown(tetromino);
             timer = 0f;
         }
+
+        hud.update();
     }
 
 
@@ -154,6 +141,7 @@ public class PlayScreen extends AbstractScreen{
             this.board.scoreBoard();
             this.tetromino = tetrominoController.getRandomTetromino();
             timer = 0f;
+            POINTS++;
         }
     }
 
@@ -172,11 +160,14 @@ public class PlayScreen extends AbstractScreen{
             //tetromino.realocate(new Vector2(5,18));
             this.tetromino = tetrominoController.getRandomTetromino();
             timer = 0;
+            POINTS++;
 
         }
     }
     public void dispose() {
+        super.dispose();
         music.dispose();
+        hud.dispose();
 
     }
 
