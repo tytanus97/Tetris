@@ -25,6 +25,7 @@ public class TetrisGame extends Game {
 		setScreen(new PlayScreen(this));
 
 
+
 	}
 
 	public void pause(boolean paused) {

@@ -3,17 +3,14 @@ package com.mygdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.TetrisGame;
 import com.mygdx.game.controller.BoardController;
 import com.mygdx.game.controller.MoveController;
 import com.mygdx.game.controller.TetrominoController;
 import com.mygdx.game.entity.board.Board;
-import com.mygdx.game.entity.tetro.*;
+import com.mygdx.game.entity.tetro.Block;
+import com.mygdx.game.entity.tetro.Tetromino;
 
 public class PlayScreen extends AbstractScreen{
 
@@ -119,7 +116,15 @@ public class PlayScreen extends AbstractScreen{
         }
 
         hud.update();
+
+
+        if(board.checkGameOver()) {
+            this.game.setScreen(new GameOverScreen(this.game, POINTS));
+            this.dispose();
+        }
     }
+
+
 
 
     private void checkVerticalCollisionWithBlocks() {
@@ -166,8 +171,9 @@ public class PlayScreen extends AbstractScreen{
     }
     public void dispose() {
         super.dispose();
-        music.dispose();
+       // music.dispose();
         hud.dispose();
+        System.out.println("Disposed correctly");
 
     }
 

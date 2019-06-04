@@ -99,12 +99,6 @@ public class Board {
     public void scoreBoard() {
 
         Collections.sort(this.blocks);
-        System.out.println("Przed usunieciem");
-        for (Block block:this.blocks) {
-            System.out.print((int)block.getY());
-        }
-        System.out.println("");
-
         List<Integer> levelsToRemove = new ArrayList<Integer>();
 
         int counter = 0;
@@ -125,19 +119,7 @@ public class Board {
         }
 
         removeBlocks(levelsToRemove);
-        System.out.println(levelsToRemove.toString());
-        System.out.println("Po usunieciu");
-        for (Block block:this.blocks) {
-            System.out.print((int)block.getY());
-        }
-        System.out.println("");
         updateBoard(levelsToRemove);
-        System.out.println("Po updacie");
-        for (Block block:this.blocks) {
-            System.out.print((int)block.getY());
-        }
-        System.out.println("");
-
     }
 
     private void updateBoard(List<Integer> levelsToRemove) {
@@ -186,6 +168,16 @@ public class Board {
             shapeRenderer.rectLine(new Vector2(0, i * TetrisGame.BLOCK_DIV)
                     , new Vector2(TetrisGame.GAME_WIDTH, i * TetrisGame.BLOCK_DIV), 1);
         }
+    }
+
+    public boolean checkGameOver() {
+
+
+
+       for(Block block:this.blocks) {
+            if(block.getY() >= 19) return true;
+        }
+        return false;
     }
 }
 

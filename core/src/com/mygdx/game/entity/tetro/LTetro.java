@@ -15,7 +15,7 @@ public class LTetro extends Tetromino{
     @Override
     protected void init() {
         blockList = new ArrayList<Block>();
-        pivot = new Vector2(5,19);
+        pivot = new Vector2(5,20);
         addBlocks();
 
     }
